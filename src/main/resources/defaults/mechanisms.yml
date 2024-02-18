@@ -361,6 +361,7 @@ mechanics:
         insulator-block: minecraft:white_wool
         stack-per-move: true
         require-sign: false
+        cooldown: 5000
     SignCopier:
         item: minecraft:ink_sac
     Snow:

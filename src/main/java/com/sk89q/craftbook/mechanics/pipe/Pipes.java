@@ -317,7 +317,7 @@ public class Pipes extends AbstractCraftBookMechanic {
     private void startPipe(Block block, List<ItemStack> items, boolean request) {
         String pipeKey = getPipeKey(block);
         long currentTime = System.currentTimeMillis();
-        if(lastFailedAttempt.containsKey(pipeKey) && (currentTime - lastFailedAttempt.get(pipeKey) < 5000)) {
+        if(lastFailedAttempt.containsKey(pipeKey) && (currentTime - lastFailedAttempt.get(pipeKey) < pipeCooldown)) {
             return; // Skip if within 5 seconds.
         }
         Set<ItemStack> filters = new HashSet<>();
@@ -517,6 +517,7 @@ public class Pipes extends AbstractCraftBookMechanic {
     private BlockStateHolder<?> pipeInsulator;
     private boolean pipeStackPerPull;
     private boolean pipeRequireSign;
+    private int pipeCooldown;
 
     @Override
     public void loadConfiguration (YAMLProcessor config, String path) {
@@ -532,5 +533,8 @@ public class Pipes extends AbstractCraftBookMechanic {
 
         config.setComment(path + "require-sign", "Requires pipes to have a [Pipe] sign connected to them. This is the only way to require permissions to make pipes.");
         pipeRequireSign = config.getBoolean(path + "require-sign", false);
+
+        config.setComment(path + "cooldown", "The amount of time in milliseconds to wait before trying to move items again.");
+        pipeCooldown = config.getInt(path + "cooldown", 5000);
     }
 }
