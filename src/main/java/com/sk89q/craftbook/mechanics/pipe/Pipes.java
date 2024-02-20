@@ -34,6 +34,7 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.type.Piston;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -474,6 +475,14 @@ public class Pipes extends AbstractCraftBookMechanic {
                     block.getWorld().dropItemNaturally(block.getLocation().add(0.5, 0.5, 0.5), item);
                 }
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onBlockBreak(BlockBreakEvent event) {
+
+        if (event.getBlock().getType() == Material.STICKY_PISTON) {
+            lastFailedAttempt.remove(getPipeKey(event.getBlock()));
         }
     }
 
